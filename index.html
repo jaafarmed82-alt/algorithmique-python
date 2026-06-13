@@ -513,6 +513,12 @@
         #seanceContent > div:last-child {
           padding: 16px !important;
         }
+        /* Rejoindre button: full width on mobile */
+        #seanceLinkArea a {
+          width: 100% !important;
+          min-width: unset !important;
+          justify-content: center !important;
+        }
 
         /* ── Modal choix séance ── */
         #choiceModal {
@@ -642,6 +648,50 @@
         text-align: center;
         margin-top: 15px;
         font-weight: bold;
+      }
+
+      /* ========== BOUTON REJOINDRE SÉANCE - ANIMATION ========== */
+      @keyframes rejoindre-pulse {
+        0%   { box-shadow: 0 4px 15px rgba(22,163,74,0.5), 0 0 0 0 rgba(22,163,74,0.5); transform: scale(1); }
+        50%  { box-shadow: 0 6px 24px rgba(22,163,74,0.7), 0 0 0 10px rgba(22,163,74,0); transform: scale(1.04); }
+        100% { box-shadow: 0 4px 15px rgba(22,163,74,0.5), 0 0 0 0 rgba(22,163,74,0); transform: scale(1); }
+      }
+      @keyframes rejoindre-shine {
+        0%   { background-position: -200% center; }
+        100% { background-position: 200% center; }
+      }
+      .btn-rejoindre {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          90deg,
+          #16a34a 0%,
+          #22c55e 40%,
+          #86efac 55%,
+          #22c55e 70%,
+          #15803d 100%
+        ) !important;
+        background-size: 200% auto !important;
+        animation: rejoindre-pulse 2s ease-in-out infinite, rejoindre-shine 2.5s linear infinite !important;
+        border: 2px solid rgba(255,255,255,0.3) !important;
+        letter-spacing: 0.3px;
+      }
+      .btn-rejoindre::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -75%;
+        width: 50%;
+        height: 200%;
+        background: rgba(255,255,255,0.18);
+        transform: skewX(-20deg);
+        animation: rejoindre-sweep 2.5s ease-in-out infinite;
+      }
+      @keyframes rejoindre-sweep {
+        0%   { left: -75%; opacity: 0; }
+        20%  { opacity: 1; }
+        60%  { left: 130%; opacity: 0; }
+        100% { left: 130%; opacity: 0; }
       }
 
       /* ========== LOADING SPINNER ========== */
@@ -2196,9 +2246,13 @@ footer div{
             <div style="width:46px;height:46px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
               <i class="fa-solid fa-circle-check" style="color:white;font-size:20px;"></i>
             </div>
-            <div>
+            <div style="flex:1;">
               <p id="seanceWelcome" style="font-weight:800;color:#14532d;font-size:16px;margin:0;"></p>
               <p style="color:#16a34a;font-size:12px;margin:3px 0 0;font-weight:600;">✓ Accès autorisé — La séance va démarrer</p>
+            </div>
+            <div id="seanceDateTime" style="display:none;text-align:right;background:rgba(255,255,255,0.7);border:1px solid #bbf7d0;border-radius:10px;padding:8px 14px;">
+              <div style="font-size:11px;color:#15803d;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;"><i class="fa-solid fa-calendar-days" style="margin-right:5px;"></i>Prochaine séance</div>
+              <div id="seanceDateTimeValue" style="font-size:14px;color:#14532d;font-weight:800;margin-top:2px;"></div>
             </div>
           </div>
 
@@ -2482,19 +2536,19 @@ footer div{
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="badge b-2sc" style="font-size:13px;padding:4px 12px;">2ème Sciences</span></div>
-                <input type="text" id="lien-2sc" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
+                <input type="text" id="lien-2sc" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;margin-bottom:8px;" /><label style="display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;">Date & heure de la prochaine séance</label><input type="datetime-local" id="date-2sc" style="width:100%;padding:9px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
               </div>
               <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="badge b-2ti" style="font-size:13px;padding:4px 12px;">2ème Tech Info</span></div>
-                <input type="text" id="lien-2ti" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
+                <input type="text" id="lien-2ti" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;margin-bottom:8px;" /><label style="display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;">Date & heure de la prochaine séance</label><input type="datetime-local" id="date-2ti" style="width:100%;padding:9px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
               </div>
               <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="badge b-3sc" style="font-size:13px;padding:4px 12px;">3ème Scientifique</span></div>
-                <input type="text" id="lien-3sc" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
+                <input type="text" id="lien-3sc" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;margin-bottom:8px;" /><label style="display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;">Date & heure de la prochaine séance</label><input type="datetime-local" id="date-3sc" style="width:100%;padding:9px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
               </div>
               <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="badge b-4sc" style="font-size:13px;padding:4px 12px;">4ème Scientifique</span></div>
-                <input type="text" id="lien-4sc" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
+                <input type="text" id="lien-4sc" placeholder="https://zoom.us/j/..." style="width:100%;padding:10px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;margin-bottom:8px;" /><label style="display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;">Date & heure de la prochaine séance</label><input type="datetime-local" id="date-4sc" style="width:100%;padding:9px 13px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;" />
               </div>
             </div>
             <button class="btn-add-student" id="btnSaveSeance" style="margin-top:16px;">
@@ -2509,10 +2563,10 @@ footer div{
         <!-- ADD STUDENT -->
         <div id="apanel-add" class="admin-panel-content">
 
-          <!-- FORMULAIRE ENREGISTRÉE -->
-          <div id="addFormEnreg">
+          <!-- FORMULAIRE UNIFIÉ -->
+          <div id="addFormUnified">
             <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#1e40af;font-weight:bold;">
-              <i class="fa-solid fa-database" style="margin-right:6px;"></i>Ajout dans la collection Firebase : <code>etudiants</code>
+              <i class="fa-solid fa-database" style="margin-right:6px;"></i>Collection Firebase : <code>etudiants</code> — un élève peut être inscrit à plusieurs niveaux et aux deux types de séance.
             </div>
             <div class="a-form-row">
               <div class="a-field"><label>Prénom & Nom</label><input type="text" id="a-nom" placeholder="ex: Ali Ben Salah" /></div>
@@ -2520,47 +2574,32 @@ footer div{
             </div>
             <div class="a-form-row">
               <div class="a-field"><label>Mot de passe</label><input type="text" id="a-pass" placeholder="ex: Ali@2025" /></div>
+            </div>
+            <div class="a-form-row">
               <div class="a-field">
-                <label>Niveau</label>
-                <select id="a-niveau">
-                  <option value="">Choisir le niveau...</option>
-                  <option value="2sc">2ème Sciences</option>
-                  <option value="2ti">2ème Tech Info</option>
-                  <option value="3sc">3ème Scientifique</option>
-                  <option value="4sc">4ème Scientifique</option>
-                </select>
+                <label>Niveau(x)</label>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;padding:10px 0;">
+                  <label style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:13px;cursor:pointer;"><input type="checkbox" class="a-niveau-chk" value="2sc" /> 2ème Sciences</label>
+                  <label style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:13px;cursor:pointer;"><input type="checkbox" class="a-niveau-chk" value="2ti" /> 2ème Tech Info</label>
+                  <label style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:13px;cursor:pointer;"><input type="checkbox" class="a-niveau-chk" value="3sc" /> 3ème Scientifique</label>
+                  <label style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:13px;cursor:pointer;"><input type="checkbox" class="a-niveau-chk" value="4sc" /> 4ème Scientifique</label>
+                </div>
+              </div>
+            </div>
+            <div class="a-form-row">
+              <div class="a-field">
+                <label>Accès</label>
+                <div style="display:flex;flex-wrap:wrap;gap:14px;padding:10px 0;">
+                  <label style="display:flex;align-items:center;gap:5px;font-weight:700;font-size:13px;color:#1e40af;cursor:pointer;"><input type="checkbox" id="a-acces-enreg" checked /> <i class="fa-solid fa-video"></i> Séance enregistrée</label>
+                  <label style="display:flex;align-items:center;gap:5px;font-weight:700;font-size:13px;color:#15803d;cursor:pointer;"><input type="checkbox" id="a-acces-enligne" /> <i class="fa-solid fa-circle-dot"></i> Séance en ligne</label>
+                </div>
               </div>
             </div>
             <button class="btn-add-student" id="btnAddStudent"><i class="fa-solid fa-plus"></i> Ajouter l'élève</button>
-            <div class="a-success" id="a-success"><i class="fa-solid fa-circle-check"></i> Élève ajouté dans <strong>etudiants</strong> !</div>
-          </div>
-
-          <!-- FORMULAIRE EN LIGNE -->
-          <div id="addFormEnligne" style="display:none;">
-            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#15803d;font-weight:bold;">
-              <i class="fa-solid fa-database" style="margin-right:6px;"></i>Ajout dans la collection Firebase : <code>etudiants_enligne</code>
-            </div>
-            <div class="a-form-row">
-              <div class="a-field"><label>Prénom & Nom</label><input type="text" id="el-nom" placeholder="ex: Ali Ben Salah" /></div>
-              <div class="a-field"><label>Login</label><input type="text" id="el-login" placeholder="ex: ali2025" /></div>
-            </div>
-            <div class="a-form-row">
-              <div class="a-field"><label>Mot de passe</label><input type="text" id="el-pass" placeholder="ex: Ali@2025" /></div>
-              <div class="a-field">
-                <label>Niveau</label>
-                <select id="el-niveau">
-                  <option value="">Choisir le niveau...</option>
-                  <option value="2sc">2ème Sciences</option>
-                  <option value="2ti">2ème Tech Info</option>
-                  <option value="3sc">3ème Scientifique</option>
-                  <option value="4sc">4ème Scientifique</option>
-                </select>
-              </div>
-            </div>
-            <button class="btn-add-student" id="btnAddStudentEnligne" style="background:#16a34a;"><i class="fa-solid fa-plus"></i> Ajouter l'élève</button>
-            <div class="a-success" id="el-success"><i class="fa-solid fa-circle-check"></i> Élève ajouté dans <strong>etudiants_enligne</strong> !</div>
+            <div class="a-success" id="a-success"><i class="fa-solid fa-circle-check"></i> Élève ajouté / mis à jour dans <strong>etudiants</strong> !</div>
           </div>
         </div>
+
 
         <!-- VIDEOS & PDF MANAGEMENT -->
         <div id="apanel-videos" class="admin-panel-content">
@@ -2800,6 +2839,30 @@ footer div{
         "3sc": "b-3sc",
         "4sc": "b-4sc",
       };
+      // ── Helpers multi-niveaux / multi-accès (rétrocompat avec anciens docs "niveau"/"niveaux") ──
+      // Chaque espace (enreg / enligne) a sa propre liste de niveaux : niveauxEnreg / niveauxEnligne.
+      // Rétrocompat : si ces champs n'existent pas, on retombe sur l'ancien champ "niveaux" (partagé), puis "niveau" (string).
+      function studentNiveaux(s, space) {
+        const field = space === "enligne" ? "niveauxEnligne" : "niveauxEnreg";
+        if (Array.isArray(s[field])) return s[field];
+        if (Array.isArray(s.niveaux)) return s.niveaux;
+        if (s.niveau) return [s.niveau];
+        return [];
+      }
+      function studentAllNiveaux(s) {
+        return Array.from(new Set([...studentNiveaux(s, "enreg"), ...studentNiveaux(s, "enligne")]));
+      }
+      function studentHasNiveau(s, niveau, space) {
+        return studentNiveaux(s, space).includes(niveau);
+      }
+      function studentHasAccess(s, space) {
+        // space: "enreg" ou "enligne"
+        if (space === "enreg") return s.accesEnreg !== false; // true par défaut (rétrocompat)
+        return s.accesEnligne === true;
+      }
+      function niveauxBadgesHtml(s, space) {
+        return studentNiveaux(s, space).map(nv => '<span class="badge ' + (BADGE_CLASS[nv] || "") + '" style="margin:1px;">' + (NIVEAUX[nv] || nv) + '</span>').join(" ");
+      }
       const ADMIN_PASSWORD = "prof2026";
 
       const DEFAULT_VIDEOS = {
@@ -3072,7 +3135,7 @@ footer div{
 
         const niveauLabels = { all:"Tous les niveaux", "2sc":"2ème Sciences", "2ti":"2ème Tech Info", "3sc":"3ème Scientifique", "4sc":"4ème Scientifique" };
         const spaceLabel = space === "enreg" ? "Séance enregistrée" : "Séance en ligne";
-        const col = space === "enreg" ? "etudiants" : "etudiants_enligne";
+        const col = "etudiants";
         const headerColor = "#ffffff";
 
         title.innerHTML = '<i class="fa-solid ' + (space==="enreg"?"fa-video":"fa-circle-dot") + '" style="margin-right:8px;opacity:0.8;"></i>' + spaceLabel + ' — ' + niveauLabels[niveau];
@@ -3080,8 +3143,9 @@ footer div{
         try {
           const snap = await getDocs(collection(db, col));
           let students = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+          students = students.filter(s => studentHasAccess(s, space));
           students.sort((a, b) => (a.nom || "").localeCompare(b.nom || ""));
-          if (niveau !== "all") students = students.filter(s => s.niveau === niveau);
+          if (niveau !== "all") students = students.filter(s => studentHasNiveau(s, niveau, space));
 
           loading.style.display = "none";
           if (!students.length) { empty.style.display = "block"; return; }
@@ -3094,7 +3158,7 @@ footer div{
               + '<td style="font-weight:bold">' + s.nom + '</td>'
               + '<td><code>' + s.login + '</code></td>'
               + '<td><code>' + s.password + '</code></td>'
-              + '<td><span class="badge ' + (BADGE_CLASS[s.niveau] || "") + '">' + (NIVEAUX[s.niveau] || s.niveau) + '</span></td>'
+              + '<td>' + niveauxBadgesHtml(s, space) + '</td>'
               + '<td><button class="btn-del" data-id="' + s._id + '" data-nom="' + s.nom.replace(/"/g,"&quot;") + '" data-space="' + space + '" title="Supprimer">'
               + '<i class="fa-solid fa-trash"></i></button></td>';
             tbody.appendChild(tr);
@@ -3110,10 +3174,34 @@ footer div{
               const confirmed = await confirmDelete(nom);
               if (!confirmed) return;
               try {
-                const colName = sp === "enreg" ? "etudiants" : "etudiants_enligne";
-                await deleteDoc(doc(db, colName, id));
-                if (sp === "enreg") { _studentsCache = null; await renderAdminEnreg(); }
-                else await renderAdminEnligne();
+                const ref = doc(db, "etudiants", id);
+                const s = students.find(x => x._id === id);
+                const niveauCtx = panel.dataset.niveau;
+                const otherSpace = sp === "enreg" ? "enligne" : "enreg";
+
+                if (s && niveauCtx && niveauCtx !== "all") {
+                  // Retirer uniquement ce niveau, dans CET espace seulement
+                  const field = sp === "enligne" ? "niveauxEnligne" : "niveauxEnreg";
+                  const remainingNiveaux = studentNiveaux(s, sp).filter(nv => nv !== niveauCtx);
+                  if (remainingNiveaux.length > 0) {
+                    await updateDoc(ref, { [field]: remainingNiveaux });
+                  } else if (s && studentHasAccess(s, otherSpace)) {
+                    // Plus aucun niveau dans cet espace : retirer juste l'accès à cet espace
+                    if (sp === "enreg") await updateDoc(ref, { accesEnreg: false, [field]: remainingNiveaux });
+                    else await updateDoc(ref, { accesEnligne: false, [field]: remainingNiveaux });
+                  } else {
+                    await deleteDoc(ref);
+                  }
+                } else if (s && studentHasAccess(s, otherSpace)) {
+                  // L'élève garde son accès à l'autre espace : on retire seulement cet accès
+                  if (sp === "enreg") await updateDoc(ref, { accesEnreg: false });
+                  else await updateDoc(ref, { accesEnligne: false });
+                } else {
+                  await deleteDoc(ref);
+                }
+                _studentsCache = null;
+                await renderAdminEnreg();
+                await renderAdminEnligne();
                 // Rafraîchir la liste inline
                 await showInlineList(panel.dataset.space, panel.dataset.niveau);
               } catch(e) { alert("Erreur suppression : " + e.message); }
@@ -3391,7 +3479,7 @@ footer div{
             btn.style.background = "#64748b";
           } else {
             info.style.cssText = "background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:9px 13px;margin-bottom:14px;font-size:12px;color:#15803d;font-weight:bold;";
-            info.innerHTML = '<i class="fa-solid fa-database" style="margin-right:6px;"></i>Ajout dans : <code>etudiants_enligne</code>';
+            info.innerHTML = '<i class="fa-solid fa-database" style="margin-right:6px;"></i>Ajout dans : <code>etudiants</code>';
             addBtn.style.background = "linear-gradient(135deg,#16a34a,#15803d)";
           }
           // Vider les champs
@@ -3413,14 +3501,30 @@ footer div{
         const btn = document.getElementById("btnInlineAddStudent");
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Ajout...';
-        const col = _inlineSpace === "enreg" ? "etudiants" : "etudiants_enligne";
+        const col = "etudiants";
         try {
           const snap = await getDocs(query(collection(db, col), where("login","==",login)));
-          if (!snap.empty) { alert("Ce login existe déjà !"); btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-plus"></i> Confirmer l\'ajout'; return; }
-          const extra = _inlineSpace === "enreg" ? { accesEnreg: true } : { accesEnLigne: true };
-          await addDoc(collection(db, col), { nom, login, password, niveau, ...extra });
-          if (_inlineSpace === "enreg") { _studentsCache = null; await renderAdminEnreg(); }
-          else await renderAdminEnligne();
+          const accessField = _inlineSpace === "enreg" ? "accesEnreg" : "accesEnligne";
+          const niveauxField = _inlineSpace === "enligne" ? "niveauxEnligne" : "niveauxEnreg";
+          if (!snap.empty) {
+            const docRef = snap.docs[0].ref;
+            const existing = snap.docs[0].data();
+            if (existing.password === password && studentNiveaux(existing, _inlineSpace).includes(niveau)) {
+              alert("Cet élève (même login et mot de passe) est déjà inscrit dans ce niveau.");
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fa-solid fa-plus"></i> Confirmer l\'ajout';
+              return;
+            }
+            // Élève existant : fusionner niveau + accès (dans cet espace uniquement)
+            const mergedNiveaux = Array.from(new Set([...studentNiveaux(existing, _inlineSpace), niveau]));
+            await updateDoc(docRef, { [niveauxField]: mergedNiveaux, [accessField]: true });
+          } else {
+            const extra = _inlineSpace === "enreg" ? { accesEnreg: true, accesEnligne: false } : { accesEnreg: false, accesEnligne: true };
+            await addDoc(collection(db, col), { nom, login, password, [niveauxField]: [niveau], ...extra });
+          }
+          _studentsCache = null;
+          await renderAdminEnreg();
+          await renderAdminEnligne();
           document.getElementById("il-success").style.display = "block";
           setTimeout(() => document.getElementById("il-success").style.display = "none", 3000);
           ["il-nom","il-login","il-pass"].forEach(id => document.getElementById(id).value = "");
@@ -3431,31 +3535,15 @@ footer div{
         btn.innerHTML = '<i class="fa-solid fa-plus"></i> Confirmer l\'ajout';
       };
 
-      // ── Sous-onglets Ajouter ──
-      let _currentAddTab = "enreg";
-      function switchAddTab(tab) {
-        _currentAddTab = tab;
-        const btnEnreg = document.getElementById("addTabEnreg");
-        const btnEnligne = document.getElementById("addTabEnligne");
-        const formEnreg = document.getElementById("addFormEnreg");
-        const formEnligne = document.getElementById("addFormEnligne");
-        if (tab === "enreg") {
-          btnEnreg.style.cssText = "display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:8px;border:2px solid #2563eb;background:#2563eb;color:white;font-weight:bold;font-size:13px;cursor:pointer;";
-          btnEnligne.style.cssText = "display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:8px;border:2px solid #e2e8f0;background:white;color:#64748b;font-weight:bold;font-size:13px;cursor:pointer;";
-          formEnreg.style.display = "block"; formEnligne.style.display = "none";
-        } else {
-          btnEnligne.style.cssText = "display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:8px;border:2px solid #16a34a;background:#16a34a;color:white;font-weight:bold;font-size:13px;cursor:pointer;";
-          btnEnreg.style.cssText = "display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:8px;border:2px solid #e2e8f0;background:white;color:#64748b;font-weight:bold;font-size:13px;cursor:pointer;";
-          formEnligne.style.display = "block"; formEnreg.style.display = "none";
-        }
-      }
-      window.switchAddTab = switchAddTab;
+      // (Sous-onglets Ajouter supprimés — formulaire unifié)
 
       // ── Stats & Liste ENREGISTRÉE ──
       async function renderAdminEnreg() {
         const students = await loadStudents();
         const counts = { "2sc":0,"2ti":0,"3sc":0,"4sc":0 };
-        students.forEach(s => { if (counts[s.niveau] !== undefined) counts[s.niveau]++; });
+        students.filter(s => studentHasAccess(s, "enreg")).forEach(s => {
+          studentNiveaux(s, "enreg").forEach(nv => { if (counts[nv] !== undefined) counts[nv]++; });
+        });
         document.getElementById("adminStats").innerHTML =
           '<div class="a-stat stat-clickable" onclick="window._statClick(this)" data-space="enreg" data-niveau="2sc">'
           + '<div class="lbl">2ème Sc</div><div class="num" style="color:#1e40af">' + counts["2sc"] + '</div></div>'
@@ -3469,30 +3557,17 @@ footer div{
 
       // ── Stats rapides EN LIGNE (pour la carte stats en haut) ──
       async function renderAdminEnligneStats() {
-        try {
-          const snap = await getDocs(collection(db, "etudiants_enligne"));
-          const students = snap.docs.map(d => d.data());
-          const counts = { "2sc":0,"2ti":0,"3sc":0,"4sc":0 };
-          students.forEach(s => { if (counts[s.niveau] !== undefined) counts[s.niveau]++; });
-          document.getElementById("adminStatsEnligne").innerHTML =
-            '<div class="a-stat stat-clickable" onclick="window._statClick(this)" data-space="enligne" data-niveau="2sc">'
-            + '<div class="lbl">2ème Sc</div><div class="num" style="color:#1e40af">' + counts["2sc"] + '</div></div>'
-            + '<div class="a-stat stat-clickable" onclick="window._statClick(this)" data-space="enligne" data-niveau="2ti">'
-            + '<div class="lbl">2ème TI</div><div class="num" style="color:#5b21b6">' + counts["2ti"] + '</div></div>'
-            + '<div class="a-stat stat-clickable" onclick="window._statClick(this)" data-space="enligne" data-niveau="3sc">'
-            + '<div class="lbl">3ème Sc</div><div class="num" style="color:#065f46">' + counts["3sc"] + '</div></div>'
-            + '<div class="a-stat stat-clickable" onclick="window._statClick(this)" data-space="enligne" data-niveau="4sc">'
-            + '<div class="lbl">4ème Sc</div><div class="num" style="color:#92400e">' + counts["4sc"] + '</div></div>';
-        } catch(e) {}
+        return renderAdminEnligne();
       }
 
       // ── Stats & Liste EN LIGNE ──
       async function renderAdminEnligne() {
         try {
-          const snap = await getDocs(collection(db, "etudiants_enligne"));
-          const students = snap.docs.map(d => d.data());
+          const students = await loadStudents(true);
           const counts = { "2sc":0,"2ti":0,"3sc":0,"4sc":0 };
-          students.forEach(s => { if (counts[s.niveau] !== undefined) counts[s.niveau]++; });
+          students.filter(s => studentHasAccess(s, "enligne")).forEach(s => {
+            studentNiveaux(s, "enligne").forEach(nv => { if (counts[nv] !== undefined) counts[nv]++; });
+          });
           document.getElementById("adminStatsEnligne").innerHTML =
             '<div class="a-stat stat-clickable" onclick="window._statClick(this)" data-space="enligne" data-niveau="2sc">'
             + '<div class="lbl">2ème Sc</div><div class="num" style="color:#1e40af">' + counts["2sc"] + '</div></div>'
@@ -3506,68 +3581,75 @@ footer div{
       }
 
       // ── Ajouter élève ENREGISTRÉE ──
+      // ── Ajouter / mettre à jour un élève (multi-niveaux + multi-accès) ──
       async function addStudent() {
         const nom = document.getElementById("a-nom").value.trim();
         const login = document.getElementById("a-login").value.trim();
         const password = document.getElementById("a-pass").value.trim();
-        const niveau = document.getElementById("a-niveau").value;
-        if (!nom || !login || !password || !niveau) { alert("Veuillez remplir tous les champs."); return; }
+        const niveaux = Array.from(document.querySelectorAll(".a-niveau-chk:checked")).map(c => c.value);
+        const accesEnreg = document.getElementById("a-acces-enreg").checked;
+        const accesEnligne = document.getElementById("a-acces-enligne").checked;
+        if (!nom || !login || !password || !niveaux.length) { alert("Veuillez remplir tous les champs et choisir au moins un niveau."); return; }
+        if (!accesEnreg && !accesEnligne) { alert("Veuillez choisir au moins un type d'accès (enregistrée et/ou en ligne)."); return; }
         const btn = document.getElementById("btnAddStudent");
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Ajout...';
         try {
           const snap = await getDocs(query(collection(db, "etudiants"), where("login","==",login)));
-          if (!snap.empty) { alert("Ce login existe déjà !"); btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-plus"></i> Ajouter l\u0027élève'; return; }
-          await addDoc(collection(db, "etudiants"), { nom, login, password, niveau, accesEnreg: true });
+          if (!snap.empty) {
+            // L'élève existe déjà : vérifier doublon exact (même login+mdp+niveau+espace)
+            const docRef = snap.docs[0].ref;
+            const existing = snap.docs[0].data();
+            if (existing.password === password) {
+              const dupNiveaux = niveaux.filter(nv =>
+                (accesEnreg && studentNiveaux(existing, "enreg").includes(nv)) ||
+                (accesEnligne && studentNiveaux(existing, "enligne").includes(nv))
+              );
+              if (dupNiveaux.length) {
+                alert("Cet élève (même login et mot de passe) est déjà inscrit dans le niveau : " + dupNiveaux.map(nv => NIVEAUX[nv] || nv).join(", "));
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-plus"></i> Ajouter l\'élève';
+                return;
+              }
+            }
+            // Fusionner niveaux + accès au lieu de rejeter
+            const update = { nom, password };
+            if (accesEnreg) update.niveauxEnreg = Array.from(new Set([...studentNiveaux(existing, "enreg"), ...niveaux]));
+            if (accesEnligne) update.niveauxEnligne = Array.from(new Set([...studentNiveaux(existing, "enligne"), ...niveaux]));
+            update.accesEnreg = (existing.accesEnreg !== false) || accesEnreg;
+            update.accesEnligne = (existing.accesEnligne === true) || accesEnligne;
+            await updateDoc(docRef, update);
+          } else {
+            const newDoc = { nom, login, password, accesEnreg, accesEnligne };
+            if (accesEnreg) newDoc.niveauxEnreg = niveaux;
+            if (accesEnligne) newDoc.niveauxEnligne = niveaux;
+            await addDoc(collection(db, "etudiants"), newDoc);
+          }
           _studentsCache = null;
           document.getElementById("a-nom").value = "";
           document.getElementById("a-login").value = "";
           document.getElementById("a-pass").value = "";
-          document.getElementById("a-niveau").value = "";
+          document.querySelectorAll(".a-niveau-chk").forEach(c => c.checked = false);
+          document.getElementById("a-acces-enreg").checked = true;
+          document.getElementById("a-acces-enligne").checked = false;
           const msg = document.getElementById("a-success");
           msg.style.display = "block";
           setTimeout(() => msg.style.display="none", 3000);
           await renderAdminEnreg();
-        } catch(e) { alert("Erreur : " + e.message); }
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-plus"></i> Ajouter l\u0027élève';
-      }
-
-      // ── Ajouter élève EN LIGNE ──
-      async function addStudentEnligne() {
-        const nom = document.getElementById("el-nom").value.trim();
-        const login = document.getElementById("el-login").value.trim();
-        const password = document.getElementById("el-pass").value.trim();
-        const niveau = document.getElementById("el-niveau").value;
-        if (!nom || !login || !password || !niveau) { alert("Veuillez remplir tous les champs."); return; }
-        const btn = document.getElementById("btnAddStudentEnligne");
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span> Ajout...';
-        try {
-          const snap = await getDocs(query(collection(db, "etudiants_enligne"), where("login","==",login)));
-          if (!snap.empty) { alert("Ce login existe déjà !"); btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-plus"></i> Ajouter l\u0027élève'; return; }
-          await addDoc(collection(db, "etudiants_enligne"), { nom, login, password, niveau, accesEnLigne: true });
-          document.getElementById("el-nom").value = "";
-          document.getElementById("el-login").value = "";
-          document.getElementById("el-pass").value = "";
-          document.getElementById("el-niveau").value = "";
-          const msg = document.getElementById("el-success");
-          msg.style.display = "block";
-          setTimeout(() => msg.style.display="none", 3000);
           await renderAdminEnligne();
         } catch(e) { alert("Erreur : " + e.message); }
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-plus"></i> Ajouter l\u0027élève';
+        btn.innerHTML = '<i class="fa-solid fa-plus"></i> Ajouter l\'élève';
       }
-      window.addStudentEnligne = addStudentEnligne;
 
-      // ── Supprimer élève ENREGISTRÉE ──
+      // ── Supprimer élève ──
       async function deleteStudent(id, nom) {
         if (!confirm('Supprimer "' + nom + '" ?')) return;
         try {
           await deleteDoc(doc(db, "etudiants", id));
           _studentsCache = null;
           await renderAdminEnreg();
+          await renderAdminEnligne();
           // Rafraîchir la liste inline si elle est ouverte
           const panel = document.getElementById("inlineListPanel");
           if (panel && panel.style.display !== "none") {
@@ -3577,22 +3659,6 @@ footer div{
         } catch(e) { alert("Erreur : " + e.message); }
       }
       window._deleteStudent = deleteStudent;
-
-      // ── Supprimer élève EN LIGNE ──
-      async function deleteStudentEnligne(id, nom) {
-        if (!confirm('Supprimer "' + nom + '" ?')) return;
-        try {
-          await deleteDoc(doc(db, "etudiants_enligne", id));
-          await renderAdminEnligne();
-          // Rafraîchir la liste inline si elle est ouverte
-          const panel = document.getElementById("inlineListPanel");
-          if (panel && panel.style.display !== "none") {
-            const activeEl = document.querySelector(".stat-clickable.active-stat");
-            if (activeEl) await showInlineList(activeEl.dataset.space, activeEl.dataset.niveau);
-          }
-        } catch(e) { alert("Erreur : " + e.message); }
-      }
-      window._deleteStudentEnligne = deleteStudentEnligne;
 
       function switchAdminTab(name) {
         const tabMap = {
@@ -4056,7 +4122,7 @@ footer div{
         message.innerText = "";
 
         try {
-          const q = query(collection(db, "etudiants_enligne"), where("login", "==", loginVal));
+          const q = query(collection(db, "etudiants"), where("login", "==", loginVal));
           const snap = await getDocs(q);
 
           if (snap.empty) {
@@ -4067,12 +4133,12 @@ footer div{
             if (user.password !== passwordVal) {
               message.style.color = "red";
               message.innerText = "Mot de passe incorrect.";
-            } else if (user.niveau !== niveauVal) {
+            } else if (!studentHasNiveau(user, niveauVal, "enligne")) {
               message.style.color = "red";
               message.innerText = "Niveau incorrect pour ce compte.";
-            } else if (false) {
-              // (accès toujours autorisé pour les élèves de etudiants_enligne)
-              message.innerText = "";
+            } else if (!studentHasAccess(user, "enligne")) {
+              message.style.color = "red";
+              message.innerText = "Vous n'avez pas accès aux séances en ligne.";
             } else {
               // Accès autorisé
               const niveauLabels = {"2sc":"2ème Sciences","2ti":"2ème Tech Info","3sc":"3ème Scientifique","4sc":"4ème Scientifique"};
@@ -4081,15 +4147,33 @@ footer div{
               // Afficher le lien du niveau de l'élève
               const lienSnap = await getDocs(collection(db, "config"));
               let lienSeance = "";
-              lienSnap.forEach(d => { if (d.id === "seance") lienSeance = d.data()[user.niveau] || ""; });
+              let lienSeanceDate = "";
+              lienSnap.forEach(d => { if (d.id === "seance") { lienSeance = d.data()[niveauVal] || ""; lienSeanceDate = d.data()[niveauVal + "_date"] || ""; } });
+              const dtArea = document.getElementById("seanceDateTime");
+              const dtValue = document.getElementById("seanceDateTimeValue");
+              if (lienSeanceDate) {
+                const dt = new Date(lienSeanceDate);
+                if (!isNaN(dt.getTime())) {
+                  const jours = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+                  const jourTxt = jours[dt.getDay()];
+                  const dateTxt = dt.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+                  const heureTxt = dt.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+                  dtValue.innerHTML = jourTxt.charAt(0).toUpperCase() + jourTxt.slice(1) + " " + dateTxt + "<br>à " + heureTxt;
+                  dtArea.style.display = "block";
+                } else {
+                  dtArea.style.display = "none";
+                }
+              } else {
+                dtArea.style.display = "none";
+              }
               const linkArea = document.getElementById("seanceLinkArea");
-              const niveauLabel = niveauLabels[user.niveau] || user.niveau;
-              const badgeCls = badgeClasses[user.niveau] || "";
+              const niveauLabel = niveauLabels[niveauVal] || niveauVal;
+              const badgeCls = badgeClasses[niveauVal] || "";
               if (lienSeance) {
                 const lienSeanceUrl = lienSeance.startsWith("http://") || lienSeance.startsWith("https://") ? lienSeance : "https://" + lienSeance;
                 linkArea.innerHTML = `
                   <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:16px 18px;margin-bottom:4px;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
                       <div style="display:flex;align-items:center;gap:10px;">
                         <div style="width:36px;height:36px;background:#16a34a;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                           <i class="fa-solid fa-door-open" style="color:white;font-size:15px;"></i>
@@ -4099,7 +4183,7 @@ footer div{
                           <span class="badge ${badgeCls}" style="font-size:12px;">${niveauLabel}</span>
                         </div>
                       </div>
-                      <a href="${lienSeanceUrl}" target="_blank" style="background:linear-gradient(135deg,#16a34a,#15803d);color:white;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(22,163,74,0.35);">
+                      <a href="${lienSeanceUrl}" target="_blank" class="btn-rejoindre" style="color:white;padding:12px 20px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-width:180px;white-space:nowrap;">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>Rejoindre la séance
                       </a>
                     </div>
@@ -4114,7 +4198,7 @@ footer div{
                 const vCol = await getDocs(collection(db, "videos_enligne"));
                 let enligneVideos = {};
                 vCol.forEach(d => { if (d.id === "all") enligneVideos = d.data(); });
-                const vList = enligneVideos[user.niveau] || [];
+                const vList = enligneVideos[niveauVal] || [];
                 if (vList.length === 0) {
                   videoListEl.innerHTML = '<p style="color:#94a3b8;font-size:13px;text-align:center;margin-top:10px;">Aucun enregistrement de séance pour votre niveau.</p>';
                 } else {
@@ -4333,10 +4417,10 @@ footer div{
             if (user.password !== passwordVal) {
               message.style.color = "red";
               message.innerText = "Mot de passe incorrect.";
-            } else if (user.niveau !== niveauVal) {
+            } else if (!studentHasNiveau(user, niveauVal, "enreg")) {
               message.style.color = "red";
               message.innerText = "Niveau incorrect pour ce compte.";
-            } else if (user.accesEnreg === false) {
+            } else if (!studentHasAccess(user, "enreg")) {
               message.style.color = "red";
               message.innerText = "Vous n'avez pas accès aux séances enregistrées.";
             } else {
@@ -4406,7 +4490,11 @@ footer div{
             "2sc": document.getElementById("lien-2sc").value.trim(),
             "2ti": document.getElementById("lien-2ti").value.trim(),
             "3sc": document.getElementById("lien-3sc").value.trim(),
-            "4sc": document.getElementById("lien-4sc").value.trim()
+            "4sc": document.getElementById("lien-4sc").value.trim(),
+            "2sc_date": document.getElementById("date-2sc").value,
+            "2ti_date": document.getElementById("date-2ti").value,
+            "3sc_date": document.getElementById("date-3sc").value,
+            "4sc_date": document.getElementById("date-4sc").value
           };
           await setDoc(doc(db, "config", "seance"), liens);
           document.getElementById("seance-success").style.display = "block";
@@ -4427,6 +4515,8 @@ footer div{
               ["2sc","2ti","3sc","4sc"].forEach(niv => {
                 const el = document.getElementById("lien-" + niv);
                 if (el && data[niv]) el.value = data[niv];
+                const dateEl = document.getElementById("date-" + niv);
+                if (dateEl && data[niv + "_date"]) dateEl.value = data[niv + "_date"];
               });
             }
           });
@@ -4456,7 +4546,6 @@ footer div{
       window.addVideo = addVideo;
       window.openAdmin = openAdmin;
       // ── Stats cliquables → liste inline par niveau ──
-      window.switchAddTab = switchAddTab;
       window.renderAdminEnreg = renderAdminEnreg;
       window.renderAdminEnligne = renderAdminEnligne;
 
@@ -4476,9 +4565,6 @@ footer div{
         on("adminTrigger", checkAdminKey);
         on("btnSaveSeance", saveSeanceLien);
         on("btnAddStudent", addStudent);
-        on("addTabEnreg",          () => switchAddTab("enreg"));
-        on("addTabEnligne",         () => switchAddTab("enligne"));
-        on("btnAddStudentEnligne",  addStudentEnligne);
         on("btnAddVideo", addVideo);
         on("btnExportCsv", exportPresenceCSV);
 
